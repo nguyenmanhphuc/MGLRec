@@ -1,10 +1,12 @@
 import torch
 import numpy as np
 
-def recall_ndcg_at_k(scores, ground_truth, k):
+def recall_ndcg_at_k(scores, train_gt, ground_truth, k):
     # scores: [num_users, num_items]
     recall_list, ndcg_list = [], []
     for u, true_items in ground_truth.items():
+        if u in train_gt:
+            scores[u, list(train_gt[u])] = -1e9
         scores[u, true_items] = -1e9  # mask training
         topk = torch.topk(scores[u], k).indices.tolist()
         hits = set(topk) & set(true_items)
@@ -24,4 +26,4 @@ def evaluate(model, edge_index, train_gt, eval_gt, device, k=20):
                                  model.item_emb.weight)
         scores = u_h @ i_h.t()
         scores = scores.cpu()
-    return recall_ndcg_at_k(scores, eval_gt, k)
+    return recall_ndcg_at_k(scores, train_gt, eval_gt, k)

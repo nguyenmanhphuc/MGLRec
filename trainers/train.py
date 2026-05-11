@@ -3,8 +3,12 @@ import torch
 def train(model, train_loader, edge_index, device,
           p_e, p_a_u, p_a_i, lambda_er, mu_fr, lr):
     model.train()
+    bat = 1
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     for users, pos, neg, pos_edge, neg_edge in train_loader:
+        print(f"Running batch: {bat}/{len(train_loader)}")
+        bat = bat + 1
+
         users = torch.tensor(users, device=device)
         pos = torch.tensor(pos, device=device)
         neg = torch.tensor(neg, device=device)

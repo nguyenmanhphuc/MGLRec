@@ -26,10 +26,10 @@ NUM_ITEMS = len(_orig2i)
 
 # --- Model Hyperparameters ---
 # Input embedding dimensions for users and items
-DIM_U = 256
-DIM_I = 256
+DIM_U = 128
+DIM_I = 128
 # Hidden dimension for GAT encoder
-HIDDEN_DIM = 256
+HIDDEN_DIM = 128
 # Number of GAT layers
 NUM_LAYERS = 2
 
@@ -44,7 +44,7 @@ MU_FR = 1.0        # Weight for feature recovery loss
 
 # --- Training Config ---
 LR = 1e-3          # Learning rate
-BATCH_SIZE = 1024  # Training batch size
+BATCH_SIZE = 4096  # Training batch size
 EPOCHS = 50        # Number of training epochs
 EVAL_FREQ = 5      # Evaluate every EVAL_FREQ epochs
 
