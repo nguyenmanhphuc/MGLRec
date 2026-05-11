@@ -57,3 +57,27 @@ def build_edge_index_and_gt(data_dir):
     edge_index = torch.tensor(edges, dtype=torch.long).t().contiguous()
 
     return edge_index, train, val, test
+
+
+def build_edge_index_and_gt_test(data_dir):
+    """
+    Loads train/val/test sets and returns:
+      edge_index (LongTensor [2, num_edges]) for training graph,
+      train_gt, val_gt, test_gt: dicts {user: [items]}
+    """
+    # Load mappings (not used directly here but available)
+    u2orig, _ = load_id_mapping(os.path.join(data_dir, 'user_list.txt'))
+    i2orig, _ = load_id_mapping(os.path.join(data_dir, 'item_list.txt'))
+
+    # Load interactions
+    train_val = load_interactions(os.path.join(data_dir, 'train_val.txt'))
+    test = load_interactions(os.path.join(data_dir, 'test.txt'))
+
+    # Build edge_index for train graph
+    edges = []
+    for u, items in train_val.items():
+        for i in items:
+            edges.append((u, i))
+    edge_index = torch.tensor(edges, dtype=torch.long).t().contiguous()
+
+    return edge_index, train_val, test

@@ -26,10 +26,10 @@ NUM_ITEMS = len(_orig2i)
 
 # --- Model Hyperparameters ---
 # Input embedding dimensions for users and items
-DIM_U = 128
-DIM_I = 128
+DIM_U = 64
+DIM_I = 64
 # Hidden dimension for GAT encoder
-HIDDEN_DIM = 128
+HIDDEN_DIM = 64
 # Number of GAT layers
 NUM_LAYERS = 2
 

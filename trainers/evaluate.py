@@ -7,7 +7,6 @@ def recall_ndcg_at_k(scores, train_gt, ground_truth, k):
     for u, true_items in ground_truth.items():
         if u in train_gt:
             scores[u, list(train_gt[u])] = -1e9
-        scores[u, true_items] = -1e9  # mask training
         topk = torch.topk(scores[u], k).indices.tolist()
         hits = set(topk) & set(true_items)
         recall = len(hits) / len(true_items)
@@ -21,9 +20,7 @@ def recall_ndcg_at_k(scores, train_gt, ground_truth, k):
 def evaluate(model, edge_index, train_gt, eval_gt, device, k=20):
     model.eval()
     with torch.no_grad():
-        u_h, i_h = model.encode(edge_index,
-                                 model.user_emb.weight,
-                                 model.item_emb.weight)
+        u_h, i_h = model.get_user_item_embeddings(edge_index)
         scores = u_h @ i_h.t()
         scores = scores.cpu()
     return recall_ndcg_at_k(scores, train_gt, eval_gt, k)
